@@ -1,0 +1,40 @@
+{
+  "name": "wiki-plugin-register",
+  "version": "0.1.0",
+  "description": "Federated Wiki - Register Plugin",
+  "keywords": [
+    "register",
+    "wiki",
+    "federated wiki",
+    "plugin"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "you@example.com",
+    "url": "http://example.com"
+  },
+  "contributors": [],
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-git-authors": "^3.2.0",
+    "mocha": "^3.1.0",
+    "expect.js": "^0.3.1",
+    "grunt-mocha-test": "^0.13.2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fedwiki/wiki-plugin-register.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fedwiki/wiki-plugin-register/issues"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
+}

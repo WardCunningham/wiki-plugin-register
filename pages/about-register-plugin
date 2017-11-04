@@ -1,0 +1,37 @@
+{
+  "title": "About Register Plugin",
+  "story": [
+  {
+    "type": "paragraph",
+    "id": "a1c2cdd215f4a8ed",
+    "text": "Here we describe the purpose of the plugin and include a sample."
+  },
+  {
+    "type": "register",
+    "id": "9828f3bd69a08c03",
+    "text": "This is text in the new plugin. You can *double-click* to edit it too."
+  }
+],
+  "journal": [
+  {
+    "type": "create",
+    "item": {
+      "title": "About Register Plugin",
+      "story": [
+  {
+    "type": "paragraph",
+    "id": "a1c2cdd215f4a8ed",
+    "text": "Here we describe the purpose of the plugin and include a sample."
+  },
+  {
+    "type": "register",
+    "id": "9828f3bd69a08c03",
+    "text": "This is text in the new plugin. You can *double-click* to edit it too."
+  }
+]
+    },
+    "date": 1509835983000,
+    "certificate": "from mkplugin.sh"
+  }
+]
+}
