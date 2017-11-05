@@ -2,6 +2,7 @@
 # These handlers are launched with the wiki server. 
 
 lookup = require 'dns-lookup'
+fs = require 'fs'
 
 startServer = (params) ->
   app = params.app
@@ -29,10 +30,23 @@ startServer = (params) ->
       return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'
       return e500 "#{err}" if err
 
-      e409 "Not ready to create #{want}"
+      console.log 'new', argv.d, want
 
-# get admin's owner.json
-# create want/status dirs
-# write owner.json
+      fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
+        e500 "#{err}" if err
+
+        fs.mkdir "#{argv.d}/#{want}", (err) ->
+          e500 "#{err}" if err
+
+          fs.mkdir "#{argv.d}/#{want}/status", (err) ->
+            e500 "#{err}" if err
+
+            fs.writeFile "#{argv.d}/#{want}/status/owner.json", owner, (err) ->
+              e500 "#{err}" if err
+
+              got = want + if port then ":#{port}" else ''
+              res.setHeader 'Content-Type', 'application/json'
+              res.send JSON.stringify {status: 'ok', site: got}
+
 
 module.exports = {startServer}
