@@ -48,6 +48,7 @@ emit = ($item, item) ->
 
 bind = ($item, item) ->
   $item.dblclick -> wiki.textEditor $item, item
+  $item.find('input').dblclick (e) -> e.stopPropagation()
 
 window.plugins.register = {emit, bind} if window?
 module.exports = {expand} if module?
