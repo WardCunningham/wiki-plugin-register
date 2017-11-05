@@ -1,9 +1,16 @@
 
-expand = (text)->
+expand = (text) ->
   text
     .replace /&/g, '&amp;'
     .replace /</g, '&lt;'
     .replace />/g, '&gt;'
+
+detag = (text) ->
+  text
+    .replace /<.+?>/g, ''
+
+error = (text) ->
+  "<div class=error style='color:#888;'>#{text}</div>"
 
 form = (item) ->
   """
@@ -25,17 +32,26 @@ submit = ($item, item) ->
       data[input.name] = input.value
     else
       valid = false
-      $div.append "<div class=error style='color:#888;'>#{input.validationMessage}</div>"
+      $div.append error input.validationMessage
   return unless valid
   console.log 'data', data
 
-  trouble = (e) -> console.log 'trouble',e
+  trouble = (e) ->
+    console.log 'trouble',e
+    $item.append error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
+
   redirect = (e) -> console.log 'redirect',e
+
+  context =
+    site: $item.parents('.page').find('h1').attr('title')
+    slug: $item.parents('.page').attr('id')
+    item: item.id
+  console.log 'context', context
 
   $.ajax
     type: 'POST'
     url: '/plugin/register/new'
-    data: JSON.stringify(data)
+    data: JSON.stringify({data, context})
     contentType: "application/json; charset=utf-8"
     dataType: 'json'
     success: redirect

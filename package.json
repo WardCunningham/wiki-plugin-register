@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-register",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Federated Wiki - Register Plugin",
   "keywords": [
     "register",
@@ -16,6 +16,9 @@
   "contributors": [],
   "scripts": {
     "test": "mocha"
+  },
+  "dependencies": {
+    "dns-lookup": "^0.1.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
