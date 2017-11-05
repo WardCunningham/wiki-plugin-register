@@ -9,9 +9,9 @@
     "plugin"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "you@example.com",
-    "url": "http://example.com"
+    "name": "Ward Cunningham",
+    "email": "ward@c2.com",
+    "url": "http://ward.asia.wiki.org"
   },
   "contributors": [],
   "scripts": {
@@ -29,10 +29,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fedwiki/wiki-plugin-register.git"
+    "url": "https://github.com/wardcunningham/wiki-plugin-register.git"
   },
   "bugs": {
-    "url": "https://github.com/fedwiki/wiki-plugin-register/issues"
+    "url": "https://github.com/wardcunningham/wiki-plugin-register/issues"
   },
   "engines": {
     "node": ">=0.10"

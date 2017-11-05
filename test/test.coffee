@@ -8,6 +8,6 @@ describe 'register plugin', ->
 
   describe 'expand', ->
 
-    it 'can make itallic', ->
-      result = register.expand 'hello *world*'
-      expect(result).to.be 'hello <i>world</i>'
+    it 'can escape tags', ->
+      result = register.expand 'hi < hello'
+      expect(result).to.be 'hi &lt; hello'

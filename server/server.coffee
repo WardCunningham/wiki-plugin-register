@@ -5,8 +5,8 @@ startServer = (params) ->
   app = params.app
   argv = params.argv
 
-  app.get '/plugin/register/:thing', (req, res) ->
-    thing = req.params.thing
-    res.json {thing}
+  app.post '/plugin/register/new', (req, res) ->
+    console.log req.body
+    res.json {status: 'ok'}
 
 module.exports = {startServer}
