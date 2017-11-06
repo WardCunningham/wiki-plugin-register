@@ -30,8 +30,6 @@ startServer = (params) ->
       return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'
       return e500 "#{err}" if err
 
-      console.log 'new', argv.d, want
-
       fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
         return e500 "#{err}" if err
 

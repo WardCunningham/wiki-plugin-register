@@ -34,10 +34,8 @@ submit = ($item, item) ->
       valid = false
       $div.append error input.validationMessage
   return unless valid
-  console.log 'data', data
 
   trouble = (e) ->
-    console.log 'trouble',e
     $item.append error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
 
   redirect = (e) ->
@@ -47,7 +45,6 @@ submit = ($item, item) ->
     site: $item.parents('.page').find('h1').attr('title')
     slug: $item.parents('.page').attr('id')
     item: item.id
-  console.log 'context', context
 
   $.ajax
     type: 'POST'
