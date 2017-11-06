@@ -1,37 +1,98 @@
 {
   "title": "About Register Plugin",
   "story": [
-  {
-    "type": "paragraph",
-    "id": "a1c2cdd215f4a8ed",
-    "text": "Here we describe the purpose of the plugin and include a sample."
-  },
-  {
-    "type": "register",
-    "id": "9828f3bd69a08c03",
-    "text": "This is text in the new plugin. You can *double-click* to edit it too."
-  }
-],
-  "journal": [
-  {
-    "type": "create",
-    "item": {
-      "title": "About Register Plugin",
-      "story": [
-  {
-    "type": "paragraph",
-    "id": "a1c2cdd215f4a8ed",
-    "text": "Here we describe the purpose of the plugin and include a sample."
-  },
-  {
-    "type": "register",
-    "id": "9828f3bd69a08c03",
-    "text": "This is text in the new plugin. You can *double-click* to edit it too."
-  }
-]
+    {
+      "type": "paragraph",
+      "id": "a1c2cdd215f4a8ed",
+      "text": "We prompt the logged-in user for information used to create a new site as a subdomain of the current site."
     },
-    "date": 1509835983000,
-    "certificate": "from mkplugin.sh"
-  }
-]
+    {
+      "type": "register",
+      "id": "9828f3bd69a08c03",
+      "text": "create a subdomain owned by this site's owner"
+    },
+    {
+      "type": "paragraph",
+      "id": "d3efa4f695d68bdc",
+      "text": "Markup creates a heading that explains what to expect of a registration. Soon additional keywords will create fields, set policy, and perform actions to provision the new site."
+    },
+    {
+      "type": "paragraph",
+      "id": "587741a58d0dded8",
+      "text": "Source in [https://github.com/WardCunningham/wiki-plugin-register github]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "About Register Plugin",
+        "story": [
+          {
+            "type": "paragraph",
+            "id": "a1c2cdd215f4a8ed",
+            "text": "Here we describe the purpose of the plugin and include a sample."
+          },
+          {
+            "type": "register",
+            "id": "9828f3bd69a08c03",
+            "text": "This is text in the new plugin. You can *double-click* to edit it too."
+          }
+        ]
+      },
+      "date": 1509835983000,
+      "certificate": "from mkplugin.sh"
+    },
+    {
+      "type": "edit",
+      "id": "a1c2cdd215f4a8ed",
+      "item": {
+        "type": "paragraph",
+        "id": "a1c2cdd215f4a8ed",
+        "text": "We prompt the logged-in user for information used to create a new site as a subdomain of the current site."
+      },
+      "date": 1509932105333
+    },
+    {
+      "type": "edit",
+      "id": "9828f3bd69a08c03",
+      "item": {
+        "type": "register",
+        "id": "9828f3bd69a08c03",
+        "text": "create a subdomain owned by this site's owner"
+      },
+      "date": 1509932198489
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "d3efa4f695d68bdc"
+      },
+      "id": "d3efa4f695d68bdc",
+      "type": "add",
+      "after": "9828f3bd69a08c03",
+      "date": 1509932201864
+    },
+    {
+      "type": "edit",
+      "id": "d3efa4f695d68bdc",
+      "item": {
+        "type": "paragraph",
+        "id": "d3efa4f695d68bdc",
+        "text": "Markup creates a heading that explains what to expect of a registration. Soon additional keywords will create fields, set policy, and perform actions to provision the new site."
+      },
+      "date": 1509932389163
+    },
+    {
+      "type": "add",
+      "id": "587741a58d0dded8",
+      "item": {
+        "type": "paragraph",
+        "id": "587741a58d0dded8",
+        "text": "Source in [https://github.com/WardCunningham/wiki-plugin-register github]"
+      },
+      "after": "d3efa4f695d68bdc",
+      "date": 1509932440320
+    }
+  ]
 }
