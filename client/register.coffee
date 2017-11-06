@@ -41,8 +41,7 @@ submit = ($item, item) ->
     $item.append error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
 
   redirect = (e) ->
-    console.log 'redirect',e
-    $item.append error "ok, #{e.site}"
+    $item.append "<div class=error><a href=#{e.site} target=_blank>#{e.site}</a></div>"
 
   context =
     site: $item.parents('.page').find('h1').attr('title')
