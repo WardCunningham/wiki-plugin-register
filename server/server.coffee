@@ -33,16 +33,16 @@ startServer = (params) ->
       console.log 'new', argv.d, want
 
       fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
-        e500 "#{err}" if err
+        return e500 "#{err}" if err
 
         fs.mkdir "#{argv.d}/#{want}", (err) ->
-          e500 "#{err}" if err
+          return e500 "#{err}" if err
 
           fs.mkdir "#{argv.d}/#{want}/status", (err) ->
-            e500 "#{err}" if err
+            return e500 "#{err}" if err
 
             fs.writeFile "#{argv.d}/#{want}/status/owner.json", owner, (err) ->
-              e500 "#{err}" if err
+              return e500 "#{err}" if err
 
               got = want + if port then ":#{port}" else ''
               res.setHeader 'Content-Type', 'application/json'
