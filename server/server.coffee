@@ -1,8 +1,9 @@
 # register plugin, server-side component
 # These handlers are launched with the wiki server. 
 
-lookup = require 'dns-lookup'
 fs = require 'fs'
+path = require 'path'
+lookup = require 'dns-lookup'
 
 startServer = (params) ->
   app = params.app
@@ -26,6 +27,7 @@ startServer = (params) ->
 
     [site,port] = context.site.split ':'
     want = "#{data.domain}.#{site}"
+    wantPath =  path.resolve(argv.data, '..', "#{data.domain}.#{site}")
     lookup want, (err, ip, family) ->
       return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'
       return e500 "#{err}" if err
@@ -33,13 +35,13 @@ startServer = (params) ->
       fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
         return e500 "#{err}" if err
 
-        fs.mkdir "#{argv.d}/#{want}", (err) ->
+        fs.mkdir "#{wantPath}", (err) ->
           return e500 "#{err}" if err
 
-          fs.mkdir "#{argv.d}/#{want}/status", (err) ->
+          fs.mkdir "#{wantPath}/status", (err) ->
             return e500 "#{err}" if err
 
-            fs.writeFile "#{argv.d}/#{want}/status/owner.json", owner, (err) ->
+            fs.writeFile "#{wantPath}/status/owner.json", owner, (err) ->
               return e500 "#{err}" if err
 
               got = want + if port then ":#{port}" else ''
