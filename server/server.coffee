@@ -44,9 +44,15 @@ startServer = (params) ->
             fs.writeFile "#{wantPath}/status/owner.json", owner, (err) ->
               return e500 "#{err}" if err
 
-              got = want + if port then ":#{port}" else ''
-              res.setHeader 'Content-Type', 'application/json'
-              res.send JSON.stringify {status: 'ok', site: got}
+              fs.readFile "#{argv.status}/favicon.png", 'binary', (err, flag) ->
+                return e500 "#{err}" if err
+
+                fs.writeFile "#{wantPath}/status/favicon.png", flag, 'binary', (err) ->
+                  return e500 "#(err)" if err
+
+                  got = want + if port then ":#{port}" else ''
+                  res.setHeader 'Content-Type', 'application/json'
+                  res.send JSON.stringify {status: 'ok', site: got}
 
 
 module.exports = {startServer}
