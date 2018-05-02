@@ -15,10 +15,13 @@ error = (text) ->
 form = (item) ->
   """
     <div style="background-color:#eee; padding:15px;">
+      <center>
+      <p><img src='/favicon.png' width=16> <span style='color:gray;'>#{window.location.host}</span></p>
       <p>#{expand item.text}</p>
       <div class=input><input type=email name=email size=60 placeholder="email" required></div>
       <div class=input><input type=text name=domain size=60 placeholder="domain" pattern="[a-z][a-z0-9]{1,7}" required></div>
-      <center>login to <button>Register</button></center>
+      login to <button>Register</button>
+      </center>
     </div>
   """
 
