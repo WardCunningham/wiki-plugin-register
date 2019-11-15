@@ -54,5 +54,12 @@ startServer = (params) ->
                   res.setHeader 'Content-Type', 'application/json'
                   res.send JSON.stringify {status: 'ok', site: got}
 
+  app.get '/plugin/register/needs', (req, res) ->
+    res.json({need: ["name", "code"], want: ["domain"]})
+
+  app.post '/plugin/register/has', (req, res) ->
+    console.log(req.body)
+    res.send({status: 'ok'})
+
 
 module.exports = {startServer}
