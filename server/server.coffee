@@ -58,8 +58,14 @@ startServer = (params) ->
     res.json({need: ["name", "code"], want: ["domain"]})
 
   app.post '/plugin/register/has', (req, res) ->
-    console.log(req.body)
-    res.send({status: 'ok'})
+    # block for non-farm sites
+    thisdomain = path.basename(argv.data)
+    subdomain = req.body.domain
+    want = "#{subdomain}.#{thisdomain}"
+    wantPath =  path.resolve(argv.data, '..', want)
+    fs.mkdir wantPath, (err) ->
+      return res.status(500).send(err.message) if err
+      res.send({status: 'ok', created: want})
 
 
 module.exports = {startServer}
