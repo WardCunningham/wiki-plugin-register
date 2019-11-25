@@ -9,6 +9,11 @@ startServer = (params) ->
   app = params.app
   argv = params.argv
 
+  settings = null
+  fs.readFile path.resolve(argv.status, 'plugins', 'register', 'settings.json'), (err, text) ->
+    return console.log('register settings', err) if err
+    settings = JSON.parse text
+
   admin = (req, res, next) ->
     if app.securityhandler.isAdmin(req)
       next()
@@ -59,8 +64,16 @@ startServer = (params) ->
 
   app.post '/plugin/register/has', (req, res) ->
     # block for non-farm sites
+    body = req.body
+
+    if settings?.code != body.code
+      return res.status(400).send("Incorrect code")
+
     thisdomain = path.basename(argv.data)
-    subdomain = req.body.domain
+    subdomain = body.domain.toLowerCase()
+    unless subdomain.match /^[a-z][a-z0-9_-]{1,15}$/
+      return res.status(400).send("Illegal domain<br>(requires 2 to 16 character alphanumeric)") 
+
     want = "#{subdomain}.#{thisdomain}"
     wantPath =  path.resolve(argv.data, '..', want)
     fs.mkdir wantPath, (err) ->
