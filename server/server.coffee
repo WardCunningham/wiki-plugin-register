@@ -22,7 +22,13 @@ startServer = (params) ->
       u = "not logged in" unless req.session?.passport?.user || req.session?.email || req.session?.friend
       res.status(403).send "Must be admin user, #{a||u}"
 
-  app.post '/plugin/register/new', admin, (req, res) ->
+  farm = (req, res, next) ->
+    if argv.farm
+      next()
+    else
+      res.status(403).send {error: 'Must be wiki farm to make subdomains'}
+
+  app.post '/plugin/register/new', admin, farm, (req, res) ->
     e400 = (msg) -> res.status(400).send(msg)
     e409 = (msg) -> res.status(409).send(msg)
     e500 = (msg) -> res.status(500).send(msg)
@@ -59,11 +65,10 @@ startServer = (params) ->
                   res.setHeader 'Content-Type', 'application/json'
                   res.send JSON.stringify {status: 'ok', site: got}
 
-  app.get '/plugin/register/needs', (req, res) ->
-    res.json({need: ["name", "code"], want: ["domain"]})
+  app.get '/plugin/register/needs', farm, (req, res) ->
+    res.json({need: ["domain", "code"], want: ["name"]})
 
-  app.post '/plugin/register/has', (req, res) ->
-    # block for non-farm sites
+  app.post '/plugin/register/has', farm, (req, res) ->
     body = req.body
 
     if settings?.code != body.code
