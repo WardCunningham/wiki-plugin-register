@@ -18,12 +18,19 @@ form = (item) ->
       <center>
       <p><img src='/favicon.png' width=16> <span style='color:gray;'>#{window.location.host}</span></p>
       <p>#{expand item.text}</p>
-      <div class=input><input type=email name=email size=60 placeholder="email" required></div>
-      <div class=input><input type=text name=domain size=60 placeholder="domain" pattern="[a-z][a-z0-9]{1,7}" required></div>
-      login to <button>Register</button>
+      <p>show <button class=existing>Existing</button> subdomains
+        <span class=existing></span>
+      </p>
+      <div class=input><input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.localhost" required></div>
+      <p>owner can <button class=register>Register</button> additional subdomain</p>
+      <span class=result></span>
+
       </center>
     </div>
   """
+
+#  <div class=input><input type=email name=email size=50 placeholder="email" required></div>
+
 
 submit = ($item, item) ->
   data = {}
@@ -32,20 +39,20 @@ submit = ($item, item) ->
   for div in $item.find('.input')
     input = ($div = $(div)).find('input').get(0)
     if input.checkValidity()
-      data[input.name] = input.value
+      data[input.name] = input.value.split('.')[0]
     else
       valid = false
       $div.append error input.validationMessage
   return unless valid
 
   trouble = (e) ->
-    $item.append error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
+    $item.find('span.result').html error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
 
   redirect = (e) ->
-    $item.append "<div class=error><a href=//#{e.site} target=_blank>#{e.site}</a></div>"
+    $item.find('span.result').html "registered<br><a href=//#{e.site} target=_blank>#{e.site}</a>"
 
   context =
-    site: $item.parents('.page').find('h1').attr('title')
+    site: $item.parents('.page').find('h1').attr('title').split("\n")[0]
     slug: $item.parents('.page').attr('id')
     item: item.id
 
@@ -60,7 +67,18 @@ submit = ($item, item) ->
 
 emit = ($item, item) ->
   $item.html form item
-  $item.find('button').click ->
+  $item.find('button.existing').click ->
+    fetch('/plugin/register/using')
+      .then (res) ->
+        res.json()
+      .then (list) ->
+        html = list.map (item) ->
+          # "#{item.site} (#{if item.owned then 'mine' else 'others'})"
+          item.site
+        if !html.length then html = ['<i>no subdomains here</i>']
+        html.unshift('<br>')
+        $item.find('span.existing').html(html.join("<br>"))
+  $item.find('button.register').click ->
     submit $item, item
 
 bind = ($item, item) ->

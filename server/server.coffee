@@ -3,16 +3,17 @@
 
 fs = require 'fs'
 path = require 'path'
-lookup = require 'dns-lookup'
+# lookup = require 'dns-lookup'
+lookup = (want,done) -> done(null,null,null)  # todo replace with proper dns lookup
 
 startServer = (params) ->
   app = params.app
   argv = params.argv
 
-  settings = null
-  fs.readFile path.resolve(argv.status, 'plugins', 'register', 'settings.json'), (err, text) ->
-    return console.log('register settings', err) if err
-    settings = JSON.parse text
+  # settings = null
+  # fs.readFile path.resolve(argv.status, 'plugins', 'register', 'settings.json'), (err, text) ->
+  #   return console.log('register settings', err) if err
+  #   settings = JSON.parse text
 
   admin = (req, res, next) ->
     if app.securityhandler.isAdmin(req)
@@ -28,7 +29,11 @@ startServer = (params) ->
     else
       res.status(403).send {error: 'Must be wiki farm to make subdomains'}
 
-  app.post '/plugin/register/new', admin, farm, (req, res) ->
+  owner = (req, res, next) ->
+    return res.status(401).send("must be owner") unless app.securityhandler.isAuthorized(req)
+    next()
+
+  app.post '/plugin/register/new', owner, farm, (req, res) ->
     e400 = (msg) -> res.status(400).send(msg)
     e409 = (msg) -> res.status(409).send(msg)
     e500 = (msg) -> res.status(500).send(msg)
@@ -65,25 +70,34 @@ startServer = (params) ->
                   res.setHeader 'Content-Type', 'application/json'
                   res.send JSON.stringify {status: 'ok', site: got}
 
-  app.get '/plugin/register/needs', farm, (req, res) ->
-    res.json({need: ["domain", "code"], want: ["name"]})
+  app.get '/plugin/register/using', farm, owner, (req, res) ->
+    looking = argv.data.split('/')
+    like = looking.pop()
+    where = looking.join('/')
+    fs.readdir where, {withFileTypes:true}, (err, files) ->
+      have = files.filter (file) -> file.isDirectory() && file.name.match ///^[a-z][a-z0-9]{1,7}\.#{like}$///
+      payload = have.map (file) -> {site: file.name, owned:true, pages:0}
+      res.json(payload)
 
-  app.post '/plugin/register/has', farm, (req, res) ->
-    body = req.body
+  # app.get '/plugin/register/needs', farm, (req, res) ->
+  #   res.json({need: ["domain", "code"], want: ["name"]})
 
-    if settings?.code != body.code
-      return res.status(400).send("Incorrect code")
+  # app.post '/plugin/register/has', farm, (req, res) ->
+  #   body = req.body
 
-    thisdomain = path.basename(argv.data)
-    subdomain = body.domain.toLowerCase()
-    unless subdomain.match /^[a-z][a-z0-9_-]{1,15}$/
-      return res.status(400).send("Illegal domain<br>(requires 2 to 16 character alphanumeric)") 
+  #   # if settings?.code != body.code
+  #   #   return res.status(400).send("Incorrect code")
 
-    want = "#{subdomain}.#{thisdomain}"
-    wantPath =  path.resolve(argv.data, '..', want)
-    fs.mkdir wantPath, (err) ->
-      return res.status(500).send(err.message) if err
-      res.send({status: 'ok', created: want})
+  #   thisdomain = path.basename(argv.data)
+  #   subdomain = body.domain.toLowerCase()
+  #   unless subdomain.match /^[a-z][a-z0-9_-]{1,15}$/
+  #     return res.status(400).send("Illegal domain<br>(requires 2 to 16 character alphanumeric)") 
+
+  #   want = "#{subdomain}.#{thisdomain}"
+  #   wantPath =  path.resolve(argv.data, '..', want)
+  #   fs.mkdir wantPath, (err) ->
+  #     return res.status(500).send(err.message) if err
+  #     res.send({status: 'ok', created: want})
 
 
 module.exports = {startServer}

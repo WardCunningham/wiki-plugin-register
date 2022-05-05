@@ -7,9 +7,9 @@
       "text": "We prompt the logged-in user for information used to create a new site as a subdomain of the current site."
     },
     {
-      "type": "register",
-      "id": "9828f3bd69a08c03",
-      "text": "create a subdomain owned by this site's owner"
+      "type": "paragraph",
+      "id": "fcf4630d778e312e",
+      "text": "See [[Register New Site]]"
     },
     {
       "type": "paragraph",
@@ -93,6 +93,22 @@
       },
       "after": "d3efa4f695d68bdc",
       "date": 1509932440320
+    },
+    {
+      "type": "remove",
+      "id": "9828f3bd69a08c03",
+      "date": 1651776983387
+    },
+    {
+      "type": "add",
+      "id": "fcf4630d778e312e",
+      "item": {
+        "type": "paragraph",
+        "id": "fcf4630d778e312e",
+        "text": "See [[Register New Site]]"
+      },
+      "after": "a1c2cdd215f4a8ed",
+      "date": 1651777007218
     }
   ]
 }

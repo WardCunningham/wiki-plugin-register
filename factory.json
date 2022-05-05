@@ -1,5 +1,5 @@
 {
   "name": "Register",
   "title": "Register Plugin",
-  "category": "other"
+  "pages": ["Register New Site"]
 }

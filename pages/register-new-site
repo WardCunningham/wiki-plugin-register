@@ -1,0 +1,80 @@
+{
+  "title": "Register New Site",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e54651140dbf3979",
+      "text": "The owner of this site can create new site as subdomains of this site. The simplest option is to create the new site with the same owner and login information as used here."
+    },
+    {
+      "type": "register",
+      "id": "9828f3bd69a08c03",
+      "text": "create a subdomain owned by this site's owner"
+    },
+    {
+      "type": "paragraph",
+      "id": "662a7167c8197a18",
+      "text": "New subdomains must be lowercase alphanumeric names up to seven character followed by dot and the current site's domain name."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Register New Site",
+        "story": []
+      },
+      "date": 1651776620878
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "e54651140dbf3979"
+      },
+      "id": "e54651140dbf3979",
+      "type": "add",
+      "date": 1651776639030
+    },
+    {
+      "type": "edit",
+      "id": "e54651140dbf3979",
+      "item": {
+        "type": "paragraph",
+        "id": "e54651140dbf3979",
+        "text": "The owner of this site can create new site as subdomains of this site. The simplest option is to create the new site with the same owner and login information as used here."
+      },
+      "date": 1651776720470
+    },
+    {
+      "id": "9828f3bd69a08c03",
+      "type": "add",
+      "item": {
+        "type": "register",
+        "id": "9828f3bd69a08c03",
+        "text": "create a subdomain owned by this site's owner"
+      },
+      "after": "e54651140dbf3979",
+      "date": 1651776815249
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "662a7167c8197a18"
+      },
+      "id": "662a7167c8197a18",
+      "type": "add",
+      "after": "9828f3bd69a08c03",
+      "date": 1651776827810
+    },
+    {
+      "type": "edit",
+      "id": "662a7167c8197a18",
+      "item": {
+        "type": "paragraph",
+        "id": "662a7167c8197a18",
+        "text": "New subdomains must be lowercase alphanumeric names up to seven character followed by dot and the current site's domain name."
+      },
+      "date": 1651776906542
+    }
+  ]
+}
