@@ -21,7 +21,7 @@ form = (item) ->
       <p>show <button class=existing>Existing</button> subdomains
         <span class=existing></span>
       </p>
-      <div class=input><input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.localhost" required></div>
+      <div class=input><input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required></div>
       <p>owner can <button class=register>Register</button> additional subdomain</p>
       <span class=result></span>
 
