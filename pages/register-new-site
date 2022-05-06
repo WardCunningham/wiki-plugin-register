@@ -14,7 +14,7 @@
     {
       "type": "paragraph",
       "id": "662a7167c8197a18",
-      "text": "New subdomains must be lowercase alphanumeric names up to seven character followed by dot and the current site's domain name."
+      "text": "New subdomains must be lowercase alpha-alphanumeric names up to seven character followed by dot and the current site's domain name."
     }
   ],
   "journal": [
@@ -75,6 +75,16 @@
         "text": "New subdomains must be lowercase alphanumeric names up to seven character followed by dot and the current site's domain name."
       },
       "date": 1651776906542
+    },
+    {
+      "type": "edit",
+      "id": "662a7167c8197a18",
+      "item": {
+        "type": "paragraph",
+        "id": "662a7167c8197a18",
+        "text": "New subdomains must be lowercase alpha-alphanumeric names up to seven character followed by dot and the current site's domain name."
+      },
+      "date": 1651835644226
     }
   ]
 }

@@ -43,6 +43,7 @@ startServer = (params) ->
 
     [site,port] = context.site.split ':'
     want = "#{data.domain}.#{site}"
+    return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
     wantPath =  path.resolve(argv.data, '..', "#{data.domain}.#{site}")
     lookup want, (err, ip, family) ->
       return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'

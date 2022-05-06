@@ -70,6 +70,9 @@ emit = ($item, item) ->
   $item.find('button.existing').click ->
     fetch('/plugin/register/using')
       .then (res) ->
+        if !res.ok
+          $item.find('span.existing').html(error "#{res.status} #{res.statusText}")
+          return null
         res.json()
       .then (list) ->
         html = list.map (item) ->
