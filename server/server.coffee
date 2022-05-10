@@ -61,24 +61,26 @@ startServer = (params) ->
             fs.writeFile "#{wantPath}/status/owner.json", owner, (err) ->
               return e500 "#{err}" if err
 
-              fs.readFile "#{argv.status}/favicon.png", 'binary', (err, flag) ->
-                return e500 "#{err}" if err
-
-                fs.writeFile "#{wantPath}/status/favicon.png", flag, 'binary', (err) ->
-                  return e500 "#(err)" if err
-
-                  got = want + if port then ":#{port}" else ''
-                  res.setHeader 'Content-Type', 'application/json'
-                  res.send JSON.stringify {status: 'ok', site: got}
+              got = want + if port then ":#{port}" else ''
+              res.setHeader 'Content-Type', 'application/json'
+              res.send JSON.stringify {status: 'ok', site: got}
 
   app.get '/plugin/register/using', farm, owner, (req, res) ->
     looking = argv.data.split('/')
     like = looking.pop()
     where = looking.join('/')
-    fs.readdir where, {withFileTypes:true}, (err, files) ->
-      have = files.filter (file) -> file.isDirectory() && file.name.match ///^[a-z][a-z0-9]{1,7}\.#{like}$///
-      payload = have.map (file) -> {site: file.name, owned:true, pages:0}
-      res.json(payload)
+    fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
+      return e500 "#{err}" if err
+      fs.readdir where, {withFileTypes:true}, (err, files) ->
+        have = files.filter (file) -> file.isDirectory() && file.name.match ///^[a-z][a-z0-9]{1,7}\.#{like}$///
+        mine = have.filter (file) ->
+          try
+            other = fs.readFileSync "#{where}/#{file.name}/status/owner.json", 'utf8'
+            return JSON.parse(owner).name == JSON.parse(other).name
+          catch
+            return false
+        payload = mine.map (file) -> {site: file.name, owned:true, pages:0}
+        res.json(payload)
 
   # app.get '/plugin/register/needs', farm, (req, res) ->
   #   res.json({need: ["domain", "code"], want: ["name"]})

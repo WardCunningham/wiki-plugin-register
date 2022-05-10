@@ -18,7 +18,7 @@ form = (item) ->
       <center>
       <p><img src='/favicon.png' width=16> <span style='color:gray;'>#{window.location.host}</span></p>
       <p>#{expand item.text}</p>
-      <p>show <button class=existing>Existing</button> subdomains
+      <p>show owner's <button class=existing>Existing</button> subdomains
         <span class=existing></span>
       </p>
       <div class=input><input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required></div>
