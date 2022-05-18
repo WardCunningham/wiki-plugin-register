@@ -1,4 +1,3 @@
-
 expand = (text) ->
   text
     .replace /&/g, '&amp;'
@@ -77,12 +76,16 @@ emit = ($item, item) ->
       .then (list) ->
         html = list.map (item) ->
           # "#{item.site} (#{if item.owned then 'mine' else 'others'})"
-          item.site
+          "<a href=//#{item.site}>#{item.site}</a>"
         if !html.length then html = ['<i>no subdomains here</i>']
         html.unshift('<br>')
         $item.find('span.existing').html(html.join("<br>"))
   $item.find('button.register').click ->
     submit $item, item
+  $item.find('span.existing, a').click ->
+    event.preventDefault()
+    page = $item.parents '.page' unless event.shiftKey
+    wiki.doInternalLink 'welcome-visitors',page,event.target.innerText
 
 bind = ($item, item) ->
   $item.dblclick -> wiki.textEditor $item, item
