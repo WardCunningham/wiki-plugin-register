@@ -66,6 +66,7 @@ submit = ($item, item) ->
 
 emit = ($item, item) ->
   $item.html form item
+  port = if (window.location.port) then ':' + window.location.port else ''
   $item.find('button.existing').click ->
     fetch('/plugin/register/using')
       .then (res) ->
@@ -76,7 +77,7 @@ emit = ($item, item) ->
       .then (list) ->
         html = list.map (item) ->
           # "#{item.site} (#{if item.owned then 'mine' else 'others'})"
-          "<a href=//#{item.site}>#{item.site}</a>"
+          "<a href=//#{item.site}#{port}>#{item.site}</a>"
         if !html.length then html = ['<i>no subdomains here</i>']
         html.unshift('<br>')
         $item.find('span.existing').html(html.join("<br>"))
@@ -85,7 +86,7 @@ emit = ($item, item) ->
   $item.find('span.existing, a').click ->
     event.preventDefault()
     page = $item.parents '.page' unless event.shiftKey
-    wiki.doInternalLink 'welcome-visitors',page,event.target.innerText
+    wiki.doInternalLink 'welcome-visitors',page,event.target.innerText+port
 
 bind = ($item, item) ->
   $item.dblclick -> wiki.textEditor $item, item
