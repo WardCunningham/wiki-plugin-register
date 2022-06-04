@@ -33,6 +33,8 @@ startServer = (params) ->
     return res.status(401).send("must be owner") unless app.securityhandler.isAuthorized(req)
     next()
 
+  # O W N E R
+
   app.post '/plugin/register/new', owner, farm, (req, res) ->
     e400 = (msg) -> res.status(400).send(msg)
     e409 = (msg) -> res.status(409).send(msg)
@@ -82,25 +84,26 @@ startServer = (params) ->
         payload = mine.map (file) -> {site: file.name, owned:true, pages:0}
         res.json(payload)
 
-  # app.get '/plugin/register/needs', farm, (req, res) ->
-  #   res.json({need: ["domain", "code"], want: ["name"]})
 
-  # app.post '/plugin/register/has', farm, (req, res) ->
-  #   body = req.body
+  # D E L E G A T E
 
-  #   # if settings?.code != body.code
-  #   #   return res.status(400).send("Incorrect code")
+  app.get '/plugin/register/delegated', farm, owner, (req, res) ->
+    looking = argv.data.split('/')
+    like = looking.pop()
+    where = looking.join('/')
+    fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
+      return e500 "#{err}" if err
+      fs.readdir where, {withFileTypes:true}, (err, files) ->
+        have = files.filter (file) -> file.isDirectory() && file.name.match ///^[a-z][a-z0-9]{1,7}\.#{like}$///
+        mine = have.filter (file) ->
+          try
+            other = fs.readFileSync "#{where}/#{file.name}/status/owner.json", 'utf8'
+            return JSON.parse(owner).name != JSON.parse(other).name
+          catch
+            return false
+        payload = mine.map (file) -> {site: file.name, owned:true, pages:0}
+        res.json(payload)
 
-  #   thisdomain = path.basename(argv.data)
-  #   subdomain = body.domain.toLowerCase()
-  #   unless subdomain.match /^[a-z][a-z0-9_-]{1,15}$/
-  #     return res.status(400).send("Illegal domain<br>(requires 2 to 16 character alphanumeric)") 
-
-  #   want = "#{subdomain}.#{thisdomain}"
-  #   wantPath =  path.resolve(argv.data, '..', want)
-  #   fs.mkdir wantPath, (err) ->
-  #     return res.status(500).send(err.message) if err
-  #     res.send({status: 'ok', created: want})
 
 
 module.exports = {startServer}

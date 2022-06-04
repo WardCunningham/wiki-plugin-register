@@ -13,6 +13,11 @@
     },
     {
       "type": "paragraph",
+      "id": "ac7896c08b04e41e",
+      "text": "See [[Register Delegate Site]]"
+    },
+    {
+      "type": "paragraph",
       "id": "d3efa4f695d68bdc",
       "text": "Markup creates a heading that explains what to expect of a registration. Soon additional keywords will create fields, set policy, and perform actions to provision the new site."
     },
@@ -109,6 +114,17 @@
       },
       "after": "a1c2cdd215f4a8ed",
       "date": 1651777007218
+    },
+    {
+      "type": "add",
+      "id": "ac7896c08b04e41e",
+      "item": {
+        "type": "paragraph",
+        "id": "ac7896c08b04e41e",
+        "text": "See [[Register Delegate Site]]"
+      },
+      "after": "fcf4630d778e312e",
+      "date": 1654313660484
     }
   ]
 }
