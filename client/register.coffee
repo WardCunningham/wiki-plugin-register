@@ -9,7 +9,7 @@ detag = (text) ->
     .replace /<.+?>/g, ''
 
 error = (text) ->
-  "<div class=error style='color:#888;'>#{text}</div>"
+  "<div class=error style='color:#F88;'>#{text}</div>"
 
 form = (item) ->
   subdomain = if item.privilege == 'delegate' then 'delegate' else 'subdomain'
@@ -31,7 +31,7 @@ form = (item) ->
       <p>show owner's <button class=existing>Existing</button> #{subdomain}s
         <span class=existing></span>
       </p>
-      <div class=input>#{fields}</div>
+      <div class=fields>#{fields}</div>
       <p>owner can <button class=register>Register</button> additional #{subdomain}</p>
       <span class=result></span>
 
@@ -44,13 +44,12 @@ submit = ($item, item) ->
   data = {}
   valid = true
   $item.find('.error').remove()
-  for div in $item.find('.input')
-    input = ($div = $(div)).find('input').get(0)
+  for input in $item.find('.fields input')
     if input.checkValidity()
       data[input.name] = input.value.split('.')[0]
     else
       valid = false
-      $div.append error input.validationMessage
+      input.insertAdjacentHTML 'afterend', error(input.validationMessage)
   return unless valid
 
   trouble = (e) ->
