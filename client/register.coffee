@@ -17,7 +17,7 @@ form = (item) ->
     """
       <input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required>
       <input type=text name=owner size=50 placeholder="user's full name" required>
-      <input type=email name=email size=50 placeholder="user's email" required>
+      <input type=text name=code size=50 placeholder="user's reclaim code" pattern="[0-9a-f]{5,64}" required>
     """
   else
     """
@@ -39,6 +39,8 @@ form = (item) ->
     </div>
   """
 
+  # <input type=email name=email size=50 placeholder="user's email" required>
+
 
 submit = ($item, item) ->
   data = {}
@@ -46,11 +48,13 @@ submit = ($item, item) ->
   $item.find('.error').remove()
   for input in $item.find('.fields input')
     if input.checkValidity()
-      data[input.name] = input.value.split('.')[0]
+      data[input.name] = input.value
     else
       valid = false
       input.insertAdjacentHTML 'afterend', error(input.validationMessage)
   return unless valid
+
+  data['domain'] = data['domain'].split('.')[0]  # we send only the subdomain name
 
   trouble = (e) ->
     $item.find('span.result').html error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"

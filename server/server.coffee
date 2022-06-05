@@ -87,6 +87,49 @@ startServer = (params) ->
 
   # D E L E G A T E
 
+  newOwner = (data, done) ->
+    ownerfile =
+      name: data.owner
+      friend:
+        secret: data.code
+    done null, JSON.stringify(ownerfile,null,2)
+
+  app.post '/plugin/register/delegate', owner, farm, (req, res) ->
+    e400 = (msg) -> res.status(400).send(msg)
+    e409 = (msg) -> res.status(409).send(msg)
+    e500 = (msg) -> res.status(500).send(msg)
+    return e400 "Missing data" unless data = req.body.data
+    return e400 "Missing context" unless context =req.body.context
+    return e400 "Missing owner name" unless data.owner
+    return e400 "Missing reclaim code" unless data.code
+    return e409 "Can't route www subdomain" if data.domain == 'www'
+
+    [site,port] = context.site.split ':'
+    want = "#{data.domain}.#{site}"
+    return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
+    return e400 "Unsupported reclaim code" unless data.code.match ///^[[0-9a-f]{5,64}$///
+    wantPath =  path.resolve(argv.data, '..', "#{data.domain}.#{site}")
+    lookup want, (err, ip, family) ->
+      return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'
+      return e500 "#{err}" if err
+
+      # fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
+      newOwner data, (err, owner) ->
+        return e500 "#{err}" if err
+
+        fs.mkdir "#{wantPath}", (err) ->
+          return e500 "#{err}" if err
+
+          fs.mkdir "#{wantPath}/status", (err) ->
+            return e500 "#{err}" if err
+
+            fs.writeFile "#{wantPath}/status/owner.json", owner, (err) ->
+              return e500 "#{err}" if err
+
+              got = want + if port then ":#{port}" else ''
+              res.setHeader 'Content-Type', 'application/json'
+              res.send JSON.stringify {status: 'ok', site: got}
+
   app.get '/plugin/register/delegated', farm, owner, (req, res) ->
     looking = argv.data.split('/')
     like = looking.pop()
