@@ -1,0 +1,74 @@
+{
+  "title": "Register Delegate Site",
+  "story": [
+    {
+      "type": "paragraph",
+      "id": "e54651140dbf3979",
+      "text": "The owner of this site can create new sites as subdomains of this site. With this form one creates the new site with owner and login information created or duplicated based on information provided."
+    },
+    {
+      "type": "register",
+      "privilege": "delegate",
+      "id": "9828f3bd69a08c03",
+      "text": "create a subdomain owned by the specified delegate"
+    },
+    {
+      "type": "paragraph",
+      "id": "662a7167c8197a18",
+      "text": "New subdomains must be lowercase alpha-alphanumeric names up to seven character followed by dot and the current site's domain name."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Register Delegate Site",
+        "story": []
+      },
+      "date": 1654313696569
+    },
+    {
+      "id": "e54651140dbf3979",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "e54651140dbf3979",
+        "text": "The owner of this site can create new sites as subdomains of this site. The simplest option is to create the new site with the same owner and login information as used here."
+      },
+      "date": 1654313760755
+    },
+    {
+      "id": "9828f3bd69a08c03",
+      "type": "add",
+      "item": {
+        "type": "register",
+        "privilege": "delegate",
+        "id": "9828f3bd69a08c03",
+        "text": "create a subdomain owned by the specified delegate"
+      },
+      "after": "e54651140dbf3979",
+      "date": 1654313766012
+    },
+    {
+      "id": "662a7167c8197a18",
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "662a7167c8197a18",
+        "text": "New subdomains must be lowercase alpha-alphanumeric names up to seven character followed by dot and the current site's domain name."
+      },
+      "after": "9828f3bd69a08c03",
+      "date": 1654313771097
+    },
+    {
+      "type": "edit",
+      "id": "e54651140dbf3979",
+      "item": {
+        "type": "paragraph",
+        "id": "e54651140dbf3979",
+        "text": "The owner of this site can create new sites as subdomains of this site. With this form one creates the new site with owner and login information created or duplicated based on information provided."
+      },
+      "date": 1654313989796
+    }
+  ]
+}

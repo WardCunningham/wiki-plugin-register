@@ -9,40 +9,52 @@ detag = (text) ->
     .replace /<.+?>/g, ''
 
 error = (text) ->
-  "<div class=error style='color:#888;'>#{text}</div>"
+  "<div class=error style='color:#F88;'>#{text}</div>"
 
 form = (item) ->
+  subdomain = if item.privilege == 'delegate' then 'delegate' else 'subdomain'
+  fields = if item.privilege == 'delegate'
+    """
+      <input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required>
+      <input type=text name=owner size=50 placeholder="user's full name" required>
+      <input type=text name=code size=50 placeholder="user's reclaim code" pattern="[0-9a-f]{5,64}" required>
+    """
+  else
+    """
+      <input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required>
+    """
   """
     <div style="background-color:#eee; padding:15px;">
       <center>
       <p><img src='/favicon.png' width=16> <span style='color:gray;'>#{window.location.host}</span></p>
       <p>#{expand item.text}</p>
-      <p>show owner's <button class=existing>Existing</button> subdomains
+      <p>show owner's <button class=existing>Existing</button> #{subdomain}s
         <span class=existing></span>
       </p>
-      <div class=input><input type=text name=domain size=50 placeholder="full domain name" pattern="[a-z][a-z0-9]{1,7}\.#{window.location.hostname}" required></div>
-      <p>owner can <button class=register>Register</button> additional subdomain</p>
+      <div class=fields>#{fields}</div>
+      <p>owner can <button class=register>Register</button> additional #{subdomain}</p>
       <span class=result></span>
 
       </center>
     </div>
   """
 
-#  <div class=input><input type=email name=email size=50 placeholder="email" required></div>
+  # <input type=email name=email size=50 placeholder="user's email" required>
 
 
 submit = ($item, item) ->
   data = {}
   valid = true
   $item.find('.error').remove()
-  for div in $item.find('.input')
-    input = ($div = $(div)).find('input').get(0)
+  for input in $item.find('.fields input')
     if input.checkValidity()
-      data[input.name] = input.value.split('.')[0]
+      data[input.name] = input.value
     else
       valid = false
-      $div.append error input.validationMessage
+      input.insertAdjacentHTML 'afterend', error(input.validationMessage)
   return unless valid
+
+  data['domain'] = data['domain'].split('.')[0]  # we send only the subdomain name
 
   trouble = (e) ->
     $item.find('span.result').html error "#{e.status} #{e.statusText}<br>#{detag e.responseText||''}"
@@ -55,9 +67,10 @@ submit = ($item, item) ->
     slug: $item.parents('.page').attr('id')
     item: item.id
 
+  endpoint = if item.privilege == 'delegate' then 'delegate' else 'new'
   $.ajax
     type: 'POST'
-    url: '/plugin/register/new'
+    url: "/plugin/register/#{endpoint}"
     data: JSON.stringify({data, context})
     contentType: "application/json; charset=utf-8"
     dataType: 'json'
@@ -68,7 +81,8 @@ emit = ($item, item) ->
   $item.html form item
   port = if (window.location.port) then ':' + window.location.port else ''
   $item.find('button.existing').click ->
-    fetch('/plugin/register/using')
+    using = if item.privilege == 'delegate' then 'delegated' else 'using'
+    fetch("/plugin/register/#{using}")
       .then (res) ->
         if !res.ok
           $item.find('span.existing').html(error "#{res.status} #{res.statusText}")
