@@ -80,7 +80,7 @@ submit = ($item, item) ->
 emit = ($item, item) ->
   $item.html form item
   port = if (window.location.port) then ':' + window.location.port else ''
-  $item.find('button.existing').click ->
+  $item.find('button.existing').on 'click', () ->
     using = if item.privilege == 'delegate' then 'delegated' else 'using'
     fetch("/plugin/register/#{using}")
       .then (res) ->
@@ -95,16 +95,16 @@ emit = ($item, item) ->
         if !html.length then html = ['<i>no subdomains here</i>']
         html.unshift('<br>')
         $item.find('span.existing').html(html.join("<br>"))
-  $item.find('button.register').click ->
+  $item.find('button.register').on 'click', () ->
     submit $item, item
-  $item.find('span.existing, a').click ->
+  $item.find('span.existing, a').on 'click', () ->
     event.preventDefault()
     page = $item.parents '.page' unless event.shiftKey
     wiki.doInternalLink 'welcome-visitors',page,event.target.innerText+port
 
 bind = ($item, item) ->
-  $item.dblclick -> wiki.textEditor $item, item
-  $item.find('input').dblclick (e) -> e.stopPropagation()
+  $item.on 'dblclick', () -> wiki.textEditor $item, item
+  $item.find('input').on 'dblclick', (e) -> e.stopPropagation()
 
 window.plugins.register = {emit, bind} if window?
 module.exports = {expand} if module?
