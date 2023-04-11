@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-register",
-  "version": "0.3.1-exp2",
+  "version": "0.4.0",
   "description": "Federated Wiki - Register Plugin",
   "keywords": [
     "register",
@@ -36,8 +36,5 @@
   },
   "bugs": {
     "url": "https://github.com/wardcunningham/wiki-plugin-register/issues"
-  },
-  "engines": {
-    "node": ">=0.10"
   }
 }
