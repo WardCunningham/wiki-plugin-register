@@ -148,5 +148,15 @@ startServer = (params) ->
         res.json(payload)
 
 
+  # C U S T O M
+
+  app.post '/plugin/register/custom', farm, (req, res) ->
+    e500 = (msg) -> res.status(500).send(msg)
+    return e500 "No post logic yet"
+
+  app.get '/plugin/register/custom', farm, owner, (req, res) ->
+    e500 = (msg) -> res.status(500).send(msg)
+    return e500 "No get logic yet"
+
 
 module.exports = {startServer}
