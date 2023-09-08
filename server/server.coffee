@@ -150,13 +150,23 @@ startServer = (params) ->
 
   # C U S T O M
 
-  app.post '/plugin/register/custom', farm, (req, res) ->
-    e500 = (msg) -> res.status(500).send(msg)
-    return e500 "No post logic yet"
+  custom = null
+  fs.readFile "#{argv.status}/register.js", 'utf8', (err, module) ->
+    custom = await import("data:text/javascript;base64,#{btoa(module)}")
 
-  app.get '/plugin/register/custom', farm, owner, (req, res) ->
-    e500 = (msg) -> res.status(500).send(msg)
-    return e500 "No get logic yet"
+  app.post '/plugin/register/custom', farm, (req, res) ->
+    e400 = (msg) -> res.status(400).send(msg)
+    e501 = (msg) -> res.status(501).send(msg)
+    return e400 "Missing data" unless data = req.body.data
+    return e400 "Missing context" unless context =req.body.context
+    console.log('custom post',{context,data,custom})
+    return e501 "No register module" unless custom
+    return await custom.post(data)
+
+  app.get '/plugin/register/custom', farm, (req, res) ->
+    e501 = (msg) -> res.status(501).send(msg)
+    console.log(req)
+    return e501 "No get logic yet"
 
 
 module.exports = {startServer}
