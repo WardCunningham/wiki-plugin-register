@@ -161,7 +161,9 @@ startServer = (params) ->
     return e400 "Missing context" unless context =req.body.context
     console.log('custom post',{context,data,custom})
     return e501 "No register module" unless custom
-    return await custom.post(data)
+    custom.post data, (err, status) ->
+      return e400 status if err
+      res.status(200).send(status)
 
   app.get '/plugin/register/custom', farm, (req, res) ->
     e501 = (msg) -> res.status(501).send(msg)
