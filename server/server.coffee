@@ -166,9 +166,11 @@ startServer = (params) ->
       res.status(200).send(status)
 
   app.get '/plugin/register/custom', farm, (req, res) ->
+    e400 = (msg) -> res.status(400).send(msg)
     e501 = (msg) -> res.status(501).send(msg)
-    console.log(req)
-    return e501 "No get logic yet"
-
+    return e501 "No register module" unless custom
+    custom.get (err,status) ->
+      return e400 status if err
+      res.status(200).send(status)
 
 module.exports = {startServer}
