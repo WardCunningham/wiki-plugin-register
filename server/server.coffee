@@ -43,7 +43,8 @@ startServer = (params) ->
     return e400 "Missing context" unless context =req.body.context
     return e409 "Can't route www subdomain" if data.domain == 'www'
 
-    [site,port] = context.site.split ':'
+    [client,port] = context.site.split ':'
+    site = (argv.data.split('/').pop()
     want = "#{data.domain}.#{site}"
     return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
     wantPath =  path.resolve(argv.data, '..', "#{data.domain}.#{site}")
