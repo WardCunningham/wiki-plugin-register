@@ -165,11 +165,11 @@ startServer = (params) ->
       return e400 status if err
       res.status(200).send(status)
 
-  app.get '/plugin/register/custom', farm, owner, (req, res) ->
+  app.get '/plugin/register/custom', farm, (req, res) ->
     e400 = (msg) -> res.status(400).send(msg)
     e501 = (msg) -> res.status(501).send(msg)
     return e501 "No register module" unless custom
-    custom.get argv, (err,status) ->
+    custom.get argv, req.query.domain, (err,status) ->
       return e400 err if err
       res.status(200).send(status)
 
