@@ -169,7 +169,7 @@ startServer = (params) ->
     e400 = (msg) -> res.status(400).send(msg)
     e501 = (msg) -> res.status(501).send(msg)
     return e501 "No register module" unless custom
-    custom.get argv, req.query.domain, (err,status) ->
+    custom.get argv, req, (err,status) ->
       return e400 err if err
       res.status(200).send(status)
 
