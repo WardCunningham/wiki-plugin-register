@@ -44,8 +44,10 @@ startServer = (params) ->
     return e409 "Can't route www subdomain" if data.domain == 'www'
 
     [site,port] = context.site.split ':'
-    want = "#{data.domain}.#{site}"
+    [host,_] = req.headers.host.split ':'
+    return e400 "Can't register from remote site" unless site is host
     return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
+    want = "#{data.domain}.#{site}"
     wantPath =  path.resolve(argv.data, '..', "#{data.domain}.#{site}")
     lookup want, (err, ip, family) ->
       return e409 "Can't resolve wildcard #{want}" if err?.code == 'ENOTFOUND'
@@ -105,6 +107,9 @@ startServer = (params) ->
     return e409 "Can't route www subdomain" if data.domain == 'www'
 
     [site,port] = context.site.split ':'
+    [host,_] = req.headers.host.split ':'
+    return e400 "Can't register from remote site" unless site is host
+    return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
     want = "#{data.domain}.#{site}"
     return e400 "Unsupported subdomain name" unless data.domain.match ///^[a-z][a-z0-9]{1,7}$///
     return e400 "Unsupported reclaim code" unless data.code.match ///^[[0-9a-f]{5,64}$///

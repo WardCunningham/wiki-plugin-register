@@ -63,7 +63,7 @@ submit = ($item, item) ->
     $item.find('span.result').html "registered<br><a href=//#{e.site} target=_blank>#{e.site}</a>"
 
   context =
-    site: $item.parents('.page').find('h1').attr('title').split("\n")[0]
+    site: window.location.host
     slug: $item.parents('.page').attr('id')
     item: item.id
 
