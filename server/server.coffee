@@ -154,7 +154,7 @@ startServer = (params) ->
   fs.readFile "#{argv.status}/register.js", 'utf8', (err, module) ->
     custom = await import("data:text/javascript;base64,#{btoa(module)}")
 
-  app.post '/plugin/register/custom', owner, farm, (req, res) ->
+  app.post '/plugin/register/custom', farm, (req, res) ->
     e400 = (msg) -> res.status(400).send(msg)
     e501 = (msg) -> res.status(501).send(msg)
     return e400 "Missing data" unless data = req.body.data
