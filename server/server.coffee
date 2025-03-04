@@ -153,5 +153,29 @@ startServer = (params) ->
         res.json(payload)
 
 
+  # C U S T O M
+
+  custom = null
+  fs.readFile "#{argv.status}/register.js", 'utf8', (err, module) ->
+    custom = await import("data:text/javascript;base64,#{btoa(module)}")
+
+  app.post '/plugin/register/custom', owner, farm, (req, res) ->
+    e400 = (msg) -> res.status(400).send(msg)
+    e501 = (msg) -> res.status(501).send(msg)
+    return e400 "Missing data" unless data = req.body.data
+    return e400 "Missing context" unless context =req.body.context
+    console.log('custom post',{context,data,custom})
+    return e501 "No register module" unless custom
+    custom.post argv, data, (err, status) ->
+      return e400 status if err
+      res.status(200).send(status)
+
+  app.get '/plugin/register/custom', farm, (req, res) ->
+    e400 = (msg) -> res.status(400).send(msg)
+    e501 = (msg) -> res.status(501).send(msg)
+    return e501 "No register module" unless custom
+    custom.get argv, req, (err,status) ->
+      return e400 err if err
+      res.status(200).send(status)
 
 module.exports = {startServer}
