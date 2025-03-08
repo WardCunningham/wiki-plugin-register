@@ -1,13 +1,14 @@
-# build time tests for register plugin
-# see http://mochajs.org/
+// build time tests for register plugin
 
-register = require '../client/register'
-expect = require 'expect.js'
+import {register} from '../src/client/register.js'
+import {suite,test} from 'node:test'
+import assert from 'node:assert'
 
-describe 'register plugin', ->
-
-  describe 'expand', ->
-
-    it 'can escape tags', ->
-      result = register.expand 'hi < hello'
-      expect(result).to.be 'hi &lt; hello'
+suite ('register plugin', () => {
+  suite ('expand', () => {
+    test ('can escape tags', () => {
+      const result = register.expand('hi < hello')
+      assert.equal(result, 'hi &lt; hello')
+    })
+  })
+})

@@ -26,14 +26,13 @@ const form = item => {
     <div style="background-color:#eee; padding:15px;">
       <center>
       <p><img src='/favicon.png' width=16> <span style='color:gray;'>${window.location.host}</span></p>
-      <p>#{expand item.text}</p>
+      <p>${expand(item.text)}</p>
       <p>show owner's <button class=existing>Existing</button> ${subdomain}s
         <span class=existing></span>
       </p>
       <div class=fields>${fields}</div>
       <p>owner can <button class=register>Register</button> additional ${subdomain}</p>
       <span class=result></span>
-
       </center>
     </div>
   `
@@ -94,11 +93,11 @@ const emit = ($item, item) => {
           $item.find('span.existing').html(error(`${res.status} ${res.statusText}`))
           return null
         }
-        res.json()
+        return res.json()
       })
       .then(list => {
         let html = list.map(item => {
-          ;`<a href=//${item.site}${port}>${item.site}</a>`
+          return `<a href=//${item.site}${port}>${item.site}</a>`
         })
         if (!html.length) html = ['<i>no subdomains here</i>']
         html.unshift('<br>')
