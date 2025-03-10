@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-register",
-  "type":"module",
+  "type": "module",
   "version": "0.5.0-pre7",
   "description": "Federated Wiki - Register Plugin",
   "keywords": [
@@ -14,7 +14,11 @@
     "email": "ward@c2.com",
     "url": "http://ward.asia.wiki.org"
   },
-  "contributors": [],
+  "contributors": [
+    "Ward Cunningham <ward@c2.com>",
+    "Paul Rodwell <paul.rodwell@btinternet.com>",
+    "Robert Best <chessscholar@gmail.com>"
+  ],
   "scripts": {
     "build": "npm run clean; npm run test; node --no-warnings scripts/build-client.js",
     "clean": "rm client/register.js client/register.js.map",
@@ -22,7 +26,6 @@
     "prettier:check": "prettier --check ./**/*.js",
     "test": "node --test"
   },
-
   "dependencies": {
     "dns-lookup": "^0.1.0"
   },
