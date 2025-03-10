@@ -1,26 +1,16 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
 // register plugin, server-side component
-// These handlers are launched with the wiki server. 
+// These handlers are launched with the wiki server.
 
 
 import fs from 'node:fs'
+import fsp from  'node:fs/promises'
 import path from 'node:path'
 
 // lookup = require 'dns-lookup'
-const lookup = (want, done) => done(null,null,null);  // todo replace with proper dns lookup
+const lookup = async (want) => {return [null,null]};  // todo replace with proper dns lookup
 
 const startServer = function(params) {
-  const {
-    app
-  } = params;
-  const {
-    argv
-  } = params;
+  const {app,argv} = params;
 
   // settings = null
   // fs.readFile path.resolve(argv.status, 'plugins', 'register', 'settings.json'), (err, text) ->
@@ -53,7 +43,7 @@ const startServer = function(params) {
 
   // O W N E R
 
-  app.post('/plugin/register/new', owner, farm, function(req, res) {
+  app.post('/plugin/register/new', owner, farm, async function(req, res) {
     let context, data;
     const e400 = msg => res.status(400).send(msg);
     const e409 = msg => res.status(409).send(msg);
@@ -62,37 +52,29 @@ const startServer = function(params) {
     if (!(context =req.body.context)) { return e400("Missing context"); }
     if (data.domain === 'www') { return e409("Can't route www subdomain"); }
 
-    const [site,port] = Array.from(context.site.split(':'));
-    const [host,_] = Array.from(req.headers.host.split(':'));
+    const [site,port] = context.site.split(':');
+    const [host] = req.headers.host.split(':');
     if (site !== host) { return e400("Can't register from remote site"); }
     if (!data.domain.match(new RegExp(`^[a-z][a-z0-9]{1,7}$`))) { return e400("Unsupported subdomain name"); }
     const want = `${data.domain}.${site}`;
     const wantPath =  path.resolve(argv.data, '..', `${data.domain}.${site}`);
-    return lookup(want, function(err, ip, family) {
-      if (err?.code === 'ENOTFOUND') { return e409(`Can't resolve wildcard ${want}`); }
-      if (err) { return e500(`${err}`); }
 
-      return fs.readFile(`${argv.status}/owner.json`, 'utf8', function(err, owner) {
-        if (err) { return e500(`${err}`); }
+    try {
+      const [ip,family] = await lookup(want)
+      const owner = await fsp.readFile(`${argv.status}/owner.json`, 'utf8')
+      await fsp.mkdir(`${wantPath}`)
+      await fsp.mkdir(`${wantPath}/status`)
+      await fsp.writeFile(`${wantPath}/status/owner.json`, owner)
 
-        return fs.mkdir(`${wantPath}`, function(err) {
-          if (err) { return e500(`${err}`); }
+      const got = want + (port ? `:${port}` : '');
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({status: 'ok', site: got}));
 
-          return fs.mkdir(`${wantPath}/status`, function(err) {
-            if (err) { return e500(`${err}`); }
+    } catch(err) {
+      e500(`${err}`)
+    }
 
-            return fs.writeFile(`${wantPath}/status/owner.json`, owner, function(err) {
-              if (err) { return e500(`${err}`); }
-
-              const got = want + (port ? `:${port}` : '');
-              res.setHeader('Content-Type', 'application/json');
-              return res.send(JSON.stringify({status: 'ok', site: got}));
-          });
-        });
-      });
-    });
   });
-});
 
   app.get('/plugin/register/using', farm, owner, function(req, res) {
     const looking = argv.data.split('/');
@@ -123,17 +105,17 @@ const startServer = function(params) {
 
   // D E L E G A T E
 
-  const newOwner = function(data, done) {
+  const newOwner = async function(data) {
     const ownerfile = {
       name: data.owner,
       friend: {
         secret: data.code
       }
     };
-    return done(null, JSON.stringify(ownerfile,null,2));
+    return JSON.stringify(ownerfile,null,2);
   };
 
-  app.post('/plugin/register/delegate', owner, farm, function(req, res) {
+  app.post('/plugin/register/delegate', owner, farm, async function(req, res) {
     let context, data;
     const e400 = msg => res.status(400).send(msg);
     const e409 = msg => res.status(409).send(msg);
@@ -144,40 +126,30 @@ const startServer = function(params) {
     if (!data.code) { return e400("Missing reclaim code"); }
     if (data.domain === 'www') { return e409("Can't route www subdomain"); }
 
-    const [site,port] = Array.from(context.site.split(':'));
-    const [host,_] = Array.from(req.headers.host.split(':'));
+    const [site,port] = context.site.split(':');
+    const [host] = req.headers.host.split(':');
     if (site !== host) { return e400("Can't register from remote site"); }
     if (!data.domain.match(new RegExp(`^[a-z][a-z0-9]{1,7}$`))) { return e400("Unsupported subdomain name"); }
     const want = `${data.domain}.${site}`;
     if (!data.domain.match(new RegExp(`^[a-z][a-z0-9]{1,7}$`))) { return e400("Unsupported subdomain name"); }
     if (!data.code.match(new RegExp(`^[[0-9a-f]{5,64}$`))) { return e400("Unsupported reclaim code"); }
     const wantPath =  path.resolve(argv.data, '..', `${data.domain}.${site}`);
-    return lookup(want, function(err, ip, family) {
-      if (err?.code === 'ENOTFOUND') { return e409(`Can't resolve wildcard ${want}`); }
-      if (err) { return e500(`${err}`); }
 
-      // fs.readFile "#{argv.status}/owner.json", 'utf8', (err, owner) ->
-      return newOwner(data, function(err, owner) {
-        if (err) { return e500(`${err}`); }
+    try {
+      const [ip, family] = await lookup(want)
+      const owner = await newOwner(data)
+      await fsp.mkdir(`${wantPath}`)
+      await fsp.mkdir(`${wantPath}/status`)
+      await fsp.writeFile(`${wantPath}/status/owner.json`, owner)
 
-        return fs.mkdir(`${wantPath}`, function(err) {
-          if (err) { return e500(`${err}`); }
+      const got = want + (port ? `:${port}` : '');
+      res.setHeader('Content-Type', 'application/json');
+      return res.send(JSON.stringify({status: 'ok', site: got}))
+    } catch(err) {
+      e500(`${err}`)
+    }
 
-          return fs.mkdir(`${wantPath}/status`, function(err) {
-            if (err) { return e500(`${err}`); }
-
-            return fs.writeFile(`${wantPath}/status/owner.json`, owner, function(err) {
-              if (err) { return e500(`${err}`); }
-
-              const got = want + (port ? `:${port}` : '');
-              res.setHeader('Content-Type', 'application/json');
-              return res.send(JSON.stringify({status: 'ok', site: got}));
-          });
-        });
-      });
-    });
   });
-});
 
   app.get('/plugin/register/delegated', farm, owner, function(req, res) {
     const looking = argv.data.split('/');
@@ -235,6 +207,7 @@ const startServer = function(params) {
       return res.status(200).send(status);
     });
   });
+
 };
 
 export {startServer};
