@@ -224,7 +224,7 @@ const startServer = function (params) {
   // fs.readFile "#{argv.status}/register.js", 'utf8', (err, module) ->
   //   custom = await import("data:text/javascript;base64,#{btoa(module)}")
 
-  app.post('/plugin/register/custom', owner, farm, function (req, res) {
+  app.post('/plugin/register/custom', farm, function (req, res) {
     let context, data
     const e400 = msg => res.status(400).send(msg)
     const e501 = msg => res.status(501).send(msg)
