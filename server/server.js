@@ -92,6 +92,7 @@ const startServer = function (params) {
   })
 
   app.get('/plugin/register/using', farm, owner, function (req, res) {
+    const e500 = msg => res.status(500).send(msg)
     const looking = argv.data.split('/')
     const like = looking.pop()
     const where = looking.join('/')
@@ -187,6 +188,7 @@ const startServer = function (params) {
   })
 
   app.get('/plugin/register/delegated', farm, owner, function (req, res) {
+    const e500 = msg => res.status(500).send(msg)
     const looking = argv.data.split('/')
     const like = looking.pop()
     const where = looking.join('/')
