@@ -10,7 +10,7 @@ const lookup = async want => {
   return [null, null]
 } // todo replace with proper dns lookup
 
-const startServer = function (params) {
+const startServer = async function (params) {
   const { app, argv } = params
 
   // settings = null
@@ -220,9 +220,14 @@ const startServer = function (params) {
 
   // C U S T O M
 
-  const custom = null
-  // fs.readFile "#{argv.status}/register.js", 'utf8', (err, module) ->
-  //   custom = await import("data:text/javascript;base64,#{btoa(module)}")
+  let custom = null
+  try {
+    const module = await fsp.readFile(`${argv.status}/register.js`, 'utf8');
+    const moduleBase64 = Buffer.from(module).toString('base64');
+    custom = await import(`data:text/javascript;base64,${moduleBase64}`);
+  } catch (err) {
+    console.error('Failed to load register module:', err);
+  }
 
   app.post('/plugin/register/custom', owner, farm, function (req, res) {
     let context, data
