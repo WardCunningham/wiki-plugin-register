@@ -6,11 +6,10 @@ gitAuthors.updatePackageJson({ order: 'date' }, error => {
   }
 })
 
-gitAuthors.updateAuthors({ order: 'date'},(error, filename) => {
-    if (error) {
-      console.log('Error: ', error)
-    } else {
-      console.log(filename, 'updated')
-    }
-  },
-)
+gitAuthors.updateAuthors({ order: 'date' }, (error, filename) => {
+  if (error) {
+    console.log('Error: ', error)
+  } else {
+    console.log(filename, 'updated')
+  }
+})
