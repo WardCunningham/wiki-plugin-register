@@ -229,7 +229,7 @@ const startServer = async function (params) {
     console.error('Failed to load register module:', err)
   }
 
-  app.post('/plugin/register/custom', owner, farm, function (req, res) {
+  app.post('/plugin/register/custom', farm, function (req, res) {
     let context, data
     const e400 = msg => res.status(400).send(msg)
     const e501 = msg => res.status(501).send(msg)
@@ -243,7 +243,7 @@ const startServer = async function (params) {
     if (!custom) {
       return e501('No register module')
     }
-    return custom.post(argv, data, function (err, status) {
+    return custom.post(argv, req, function (err, status) {
       if (err) {
         return e400(status)
       }
