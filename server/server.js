@@ -241,7 +241,7 @@ const startServer = async function (params) {
     }
     console.log('custom post', { context, data, custom })
     if (!custom) {
-      return e501('No register module')
+      return e501('No register adapter found for this site. Speak with your administrator about having one installed.')
     }
     return custom.post(argv, req, function (err, status) {
       if (err) {
