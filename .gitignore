@@ -1,5 +1,6 @@
-/*/*.js
-/*/*.map
+client/register.*
+coverage
 node_modules
 npm-debug.log
-status
+meta-client.json
+package-lock.json

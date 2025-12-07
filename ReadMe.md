@@ -10,4 +10,3 @@ This plugin, type: register, extends the markup of the federated wiki.
 ## License
 
 MIT
-

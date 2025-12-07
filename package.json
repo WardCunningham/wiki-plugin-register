@@ -1,6 +1,7 @@
 {
   "name": "wiki-plugin-register",
-  "version": "0.4.1",
+  "type": "module",
+  "version": "0.5.0-pre9",
   "description": "Federated Wiki - Register Plugin",
   "keywords": [
     "register",
@@ -13,21 +14,27 @@
     "email": "ward@c2.com",
     "url": "http://ward.asia.wiki.org"
   },
-  "contributors": [],
+  "contributors": [
+    "Ward Cunningham <ward@c2.com>",
+    "Paul Rodwell <paul.rodwell@btinternet.com>",
+    "Robert Best <chessscholar@gmail.com>"
+  ],
   "scripts": {
-    "test": "mocha"
+    "build": "npm run clean; npm run test; node --no-warnings scripts/build-client.js",
+    "clean": "rm client/register.js client/register.js.map",
+    "prettier:format": "prettier --write './**/*.js'",
+    "prettier:check": "prettier --check ./**/*.js",
+    "test": "node --test"
   },
   "dependencies": {
     "dns-lookup": "^0.1.0"
   },
   "devDependencies": {
-    "expect.js": "^0.3.1",
-    "grunt": "^1.0.4",
-    "grunt-contrib-coffee": "^2.1.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-git-authors": "^3.2.0",
-    "grunt-mocha-test": "^0.13.2",
-    "mocha": "^10.2.0"
+    "@eslint/js": "^9.21.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3"
   },
   "license": "MIT",
   "repository": {

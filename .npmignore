@@ -1,4 +1,10 @@
-/**/*.coffee
-Gruntfile.js
+coverage
+scripts
+src
 test
-status
+meta-client.json
+eslint.config.js
+.github
+.prettier*
+.vscode
+.zed
