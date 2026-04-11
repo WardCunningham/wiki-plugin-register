@@ -226,7 +226,10 @@ const startServer = async function (params) {
     const moduleBase64 = Buffer.from(module).toString('base64')
     custom = await import(`data:text/javascript;base64,${moduleBase64}`)
   } catch (err) {
-    console.error('Failed to load register module:', err)
+    // ignore if no custom register adapter exists , but log other errors
+    if (err.code !== 'ENOENT') {
+      console.error('Failed to load register module:', err)
+    }
   }
 
   app.post('/plugin/register/custom', farm, function (req, res) {
